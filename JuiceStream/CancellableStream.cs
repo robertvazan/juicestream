@@ -34,7 +34,6 @@ namespace JuiceStream
         }
         public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state) { return Inner.BeginRead(buffer, offset, count, callback, state); }
         public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state) { return Inner.BeginWrite(buffer, offset, count, callback, state); }
-        public override void Close() { Inner.Close(); }
         public override async Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
         {
             if (cancellationToken == CancellationToken.None)

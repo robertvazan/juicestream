@@ -46,7 +46,7 @@ namespace JuiceStream
             while (true)
             {
                 await Task.Delay(Interval, Cancel.Token);
-                await Stream.WriteAsync(ping, 0, ping.Length, Cancel.Token);
+                await Stream.WriteAsync(ping, Cancel.Token);
             }
         }
 
@@ -56,7 +56,7 @@ namespace JuiceStream
             while (true)
             {
                 await AckQueue.WaitAsync(Cancel.Token);
-                await Stream.WriteAsync(ack, 0, ack.Length, Cancel.Token);
+                await Stream.WriteAsync(ack, Cancel.Token);
             }
         }
 
@@ -65,9 +65,7 @@ namespace JuiceStream
             byte[] received = new byte[1];
             while (true)
             {
-                var read = await Stream.ReadAsync(received, 0, 1, Cancel.Token);
-                if (read == 0)
-                    throw new EndOfStreamException();
+                await Stream.ReadFixedAsync(received, Cancel.Token);
                 if (received[0] == 0)
                     AckQueue.Release();
             }
