@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +9,12 @@ using System.Threading.Tasks;
 namespace JuiceStreamTests
 {
     [TestFixture]
-    public class DuplexBufferedStreamTest
+    public class PrefixStreamTests
     {
         [Test]
         public void CommonOperations()
         {
-            TestUtils.TestCommonOperations(inner => new DuplexBufferedStream(inner), bytes => bytes);
+            TestUtils.TestCommonOperations(inner => new PrefixStream(new byte[] { 33, 22, 11 }, inner), bytes => new byte[] { 33, 22, 11 }.Concat(bytes));
         }
     }
 }
