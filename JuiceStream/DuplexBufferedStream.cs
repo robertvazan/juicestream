@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RobertsStreamUtils
+namespace JuiceStream
 {
     public class DuplexBufferedStream : Stream
     {

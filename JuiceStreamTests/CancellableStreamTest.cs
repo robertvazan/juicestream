@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using RobertsStreamUtils;
+﻿using JuiceStream;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RobertsStreamUtilsTests
+namespace JuiceStreamTests
 {
     [TestFixture]
     public class CancellableStreamTest
