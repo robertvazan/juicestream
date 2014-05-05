@@ -12,14 +12,12 @@ namespace JuiceStream
     public class PingStream : IDisposable
     {
         readonly Stream Stream;
-        readonly TaskCompletionSource<Exception> FailTask = new TaskCompletionSource<Exception>();
+        readonly TaskCompletionSource CompletionSource = new TaskCompletionSource();
         readonly CancellationTokenSource Cancel = new CancellationTokenSource();
         readonly SemaphoreSlim AckQueue = new SemaphoreSlim(0);
-        static readonly byte[] PingMessage = new byte[] { 0 };
-        static readonly byte[] AckMessage = new byte[] { 1 };
 
         public TimeSpan Interval { get; set; }
-        public Task<Exception> Failed { get { return FailTask.Task; } }
+        public Task Completed { get { return CompletionSource.Task; } }
 
         public PingStream(Stream stream)
         {
@@ -33,6 +31,7 @@ namespace JuiceStream
         {
             Cancel.Cancel();
             Stream.Dispose();
+            CompletionSource.TrySetResult();
         }
 
         async void Run()
@@ -43,40 +42,34 @@ namespace JuiceStream
 
         async Task SendPings()
         {
+            var ping = new byte[] { 0 };
             while (true)
             {
                 await Task.Delay(Interval, Cancel.Token);
-                await Stream.WriteAsync(PingMessage, 0, PingMessage.Length, Cancel.Token);
+                await Stream.WriteAsync(ping, 0, ping.Length, Cancel.Token);
             }
         }
 
         async Task AckPings()
         {
+            var ack = new byte[] { 1 };
             while (true)
             {
                 await AckQueue.WaitAsync(Cancel.Token);
-                await Stream.WriteAsync(AckMessage, 0, AckMessage.Length, Cancel.Token);
+                await Stream.WriteAsync(ack, 0, ack.Length, Cancel.Token);
             }
         }
 
         async Task ReadPings()
         {
-            try
+            byte[] received = new byte[1];
+            while (true)
             {
-                byte[] received = new byte[1];
-                while (true)
-                {
-                    var read = await Stream.ReadAsync(received, 0, 1, Cancel.Token);
-                    if (read == 0)
-                        throw new EndOfStreamException();
-                    if (received[0] == 0)
-                        AckQueue.Release();
-                }
-            }
-            catch (Exception e)
-            {
-                FailTask.TrySetResult(e);
-                Dispose();
+                var read = await Stream.ReadAsync(received, 0, 1, Cancel.Token);
+                if (read == 0)
+                    throw new EndOfStreamException();
+                if (received[0] == 0)
+                    AckQueue.Release();
             }
         }
 
@@ -91,7 +84,7 @@ namespace JuiceStream
             }
             catch (Exception e)
             {
-                FailTask.TrySetResult(e);
+                CompletionSource.TrySetException(e);
                 Dispose();
             }
         }
