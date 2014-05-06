@@ -16,5 +16,12 @@ namespace JuiceStreamTests
         {
             TestUtils.TestCommonOperations(inner => new PrefixStream(new byte[] { 33, 22, 11 }, inner), bytes => new byte[] { 33, 22, 11 }.Concat(bytes));
         }
+
+        [Test]
+        public void Twister()
+        {
+            var queue = new DuplexQueueStream();
+            TestUtils.RunTwister(new PrefixStream("prefix", queue), new PrefixStream("prefix", queue.Peer));
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace JuiceStream
 {
     public class DuplexQueueStream : Stream
     {
-        public readonly DuplexQueueStream Pair;
+        public readonly DuplexQueueStream Peer;
         readonly QueueStream Outbound;
         readonly QueueStream Inbound;
 
@@ -27,14 +27,14 @@ namespace JuiceStream
         {
             Outbound = new QueueStream();
             Inbound = new QueueStream();
-            Pair = new DuplexQueueStream(this);
+            Peer = new DuplexQueueStream(this);
         }
         
         DuplexQueueStream(DuplexQueueStream pair)
         {
             Outbound = pair.Inbound;
             Inbound = pair.Outbound;
-            Pair = pair;
+            Peer = pair;
         }
 
         protected override void Dispose(bool disposing)

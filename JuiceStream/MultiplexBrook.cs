@@ -16,6 +16,7 @@ namespace JuiceStream
         byte[] ReadBuffer;
         int ReadOffset;
         bool EndOfStream;
+        const int MaxPacketSize = (1 << 14) - 1;
         readonly CancellationTokenSource CancelBrook = new CancellationTokenSource();
         readonly AsyncCollection<byte[]> ReadQueue = new AsyncCollection<byte[]>(2);
 
@@ -51,6 +52,9 @@ namespace JuiceStream
                     var read = Math.Min(ReadBuffer.Length - ReadOffset, count);
                     Array.Copy(ReadBuffer, ReadOffset, buffer, offset, read);
                     total += read;
+                    count -= read;
+                    offset += read;
+                    ReadOffset += read;
                 }
                 else
                 {
@@ -65,15 +69,15 @@ namespace JuiceStream
         public override long Seek(long offset, SeekOrigin origin) { throw new NotSupportedException(); }
         public override void SetLength(long value) { throw new NotSupportedException(); }
         public override void Write(byte[] buffer, int offset, int count) { WriteAsync(buffer, offset, count).Wait(); }
-        public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken token)
+        public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken token)
         {
-            if (offset != 0 || count != buffer.Length)
+            while (count > 0)
             {
-                var slice = new byte[buffer.Length];
-                Array.Copy(buffer, offset, slice, 0, count);
-                buffer = slice;
+                var slice = new byte[Math.Min(count, MaxPacketSize)];
+                Array.Copy(buffer, offset, slice, 0, slice.Length);
+                await Stream.SendAsync(BrookId, slice, token);
+                count -= slice.Length;
             }
-            return Stream.SendAsync(BrookId, buffer, token);
         }
 
         public async Task ReceiveAsync(byte[] data, CancellationToken cancellation)

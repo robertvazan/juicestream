@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,19 +9,13 @@ using System.Threading.Tasks;
 namespace JuiceStreamTests
 {
     [TestFixture]
-    public class DuplexBufferedStreamTest
+    public class DuplexQueueStreamTest
     {
-        [Test]
-        public void CommonOperations()
-        {
-            TestUtils.TestCommonOperations(inner => new DuplexBufferedStream(inner), bytes => bytes);
-        }
-
         [Test]
         public void Twister()
         {
             var queue = new DuplexQueueStream();
-            TestUtils.RunTwister(new DuplexBufferedStream(queue), new DuplexBufferedStream(queue.Peer));
+            TestUtils.RunTwister(queue, queue.Peer);
         }
     }
 }

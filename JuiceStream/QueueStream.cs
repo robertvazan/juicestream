@@ -37,37 +37,38 @@ namespace JuiceStream
         public override int Read(byte[] buffer, int offset, int count) { return ReadAsync(buffer, offset, count).Result; }
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken token)
         {
-            int total = 0;
-            while (count > 0 && !EndOfStream)
+            if (count > 0 && !EndOfStream)
             {
-                if (ReadBuffer != null && ReadOffset < ReadBuffer.Length)
-                {
-                    var read = Math.Min(ReadBuffer.Length - ReadOffset, count);
-                    Array.Copy(ReadBuffer, ReadOffset, buffer, offset, read);
-                    total += read;
-                }
-                else
+                if (ReadBuffer == null || ReadOffset >= ReadBuffer.Length)
                 {
                     ReadBuffer = await Queue.TakeAsync(token);
                     ReadOffset = 0;
                     if (ReadBuffer == null)
                         EndOfStream = true;
                 }
+                if (!EndOfStream)
+                {
+                    var read = Math.Min(ReadBuffer.Length - ReadOffset, count);
+                    Array.Copy(ReadBuffer, ReadOffset, buffer, offset, read);
+                    ReadOffset += read;
+                    return read;
+                }
             }
-            return total;
+            return 0;
         }
         public override long Seek(long offset, SeekOrigin origin) { throw new NotSupportedException(); }
         public override void SetLength(long value) { throw new NotSupportedException(); }
         public override void Write(byte[] buffer, int offset, int count) { WriteAsync(buffer, offset, count).Wait(); }
         public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken token)
         {
-            if (offset != 0 || count != buffer.Length)
+            if (count != 0)
             {
-                var slice = new byte[buffer.Length];
+                var slice = new byte[count];
                 Array.Copy(buffer, offset, slice, 0, count);
-                buffer = slice;
+                return Queue.AddAsync(slice, token);
             }
-            return Queue.AddAsync(buffer, token);
+            else
+                return TaskConstants.Completed;
         }
     }
 }

@@ -44,8 +44,11 @@
   <ItemGroup>
     <Compile Include="CancellableStreamTest.cs" />
     <Compile Include="DuplexBufferedStreamTest.cs" />
+    <Compile Include="DuplexQueueStreamTest.cs" />
+    <Compile Include="MultiplexStreamTests.cs" />
     <Compile Include="PrefixStreamTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueStreamTest.cs" />
     <Compile Include="TestUtils.cs" />
   </ItemGroup>
   <ItemGroup>

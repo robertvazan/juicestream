@@ -18,5 +18,12 @@ namespace JuiceStreamTests
         {
             TestUtils.TestCommonOperations(inner => new CancellableStream(inner, new CancellationTokenSource().Token), bytes => bytes);
         }
+
+        [Test]
+        public void Twister()
+        {
+            var queue = new DuplexQueueStream();
+            TestUtils.RunTwister(new CancellableStream(queue, new CancellationTokenSource().Token), new CancellableStream(queue.Peer, new CancellationTokenSource().Token));
+        }
     }
 }
