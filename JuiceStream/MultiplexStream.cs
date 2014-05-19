@@ -15,10 +15,10 @@ namespace JuiceStream
     {
         readonly Stream Inner;
         readonly CancellationTokenSource CancelAll = new CancellationTokenSource();
-        readonly Dictionary<long, MultiplexBrook> Brooks = new Dictionary<long, MultiplexBrook>();
-        long NextBrookId = 1;
-        long InboundBrook;
-        long OutboundBrook;
+        readonly Dictionary<long, MultiplexSubstream> Substreams = new Dictionary<long, MultiplexSubstream>();
+        long NextId = 1;
+        long InboundSubstream;
+        long OutboundSubstream;
         readonly AsyncLock WriteLock = new AsyncLock();
         readonly AsyncCollection<Stream> Pending = new AsyncCollection<Stream>(5);
         static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -37,12 +37,12 @@ namespace JuiceStream
 
         public Stream Connect()
         {
-            lock (Brooks)
+            lock (Substreams)
             {
-                var brook = new MultiplexBrook(this, NextBrookId);
-                Brooks[NextBrookId] = brook;
-                ++NextBrookId;
-                return brook;
+                var substream = new MultiplexSubstream(this, NextId);
+                Substreams[NextId] = substream;
+                ++NextId;
+                return substream;
             }
         }
 
@@ -57,28 +57,28 @@ namespace JuiceStream
                 while (true)
                 {
                     var packet = await Task.Run(() => Serializer.DeserializeWithLengthPrefix<MultiplexPacket>(Inner, PrefixStyle.Base128), CancelAll.Token);
-                    if (packet.BrookId != 0)
-                        InboundBrook = -packet.BrookId;
-                    else if (InboundBrook == 0)
+                    if (packet.SubstreamId != 0)
+                        InboundSubstream = -packet.SubstreamId;
+                    else if (InboundSubstream == 0)
                         throw new FormatException();
-                    MultiplexBrook brook;
+                    MultiplexSubstream substream;
                     bool created = false;
-                    lock (Brooks)
+                    lock (Substreams)
                     {
-                        if (!Brooks.TryGetValue(InboundBrook, out brook) && InboundBrook < 0)
+                        if (!Substreams.TryGetValue(InboundSubstream, out substream) && InboundSubstream < 0)
                         {
-                            Brooks[InboundBrook] = brook = new MultiplexBrook(this, InboundBrook);
+                            Substreams[InboundSubstream] = substream = new MultiplexSubstream(this, InboundSubstream);
                             created = true;
                         }
                     }
                     if (created)
-                        await Pending.AddAsync(brook, CancelAll.Token);
-                    if (brook != null)
+                        await Pending.AddAsync(substream, CancelAll.Token);
+                    if (substream != null)
                     {
                         if (packet.Data != null && packet.Data.Length > 0)
-                            await brook.ReceiveAsync(packet.Data, CancelAll.Token);
+                            await substream.ReceiveAsync(packet.Data, CancelAll.Token);
                         if (packet.EndOfStream)
-                            await brook.ReceiveEndOfStream(CancelAll.Token);
+                            await substream.ReceiveEndOfStream(CancelAll.Token);
                     }
                 }
             }
@@ -92,13 +92,13 @@ namespace JuiceStream
             }
         }
 
-        internal Task SendAsync(long brookId, byte[] data, CancellationToken cancellation)
+        internal Task SendAsync(long substreamId, byte[] data, CancellationToken cancellation)
         {
             return SendAsync(linked =>
             {
                 return Task.Run(() => Serializer.SerializeWithLengthPrefix(Inner, new MultiplexPacket()
                 {
-                    BrookId = brookId == OutboundBrook ? 0 : OutboundBrook = brookId,
+                    SubstreamId = substreamId == OutboundSubstream ? 0 : OutboundSubstream = substreamId,
                     Data = data
                 }, PrefixStyle.Base128), linked);
             }, cancellation);
@@ -106,15 +106,15 @@ namespace JuiceStream
 
         internal Task FlushAsync(CancellationToken cancellation) { return SendAsync(linked => Inner.FlushAsync(linked), cancellation); }
 
-        internal void QueueClose(long brookId)
+        internal void QueueClose(long substreamId)
         {
-            lock (Brooks)
-                Brooks.Remove(brookId);
+            lock (Substreams)
+                Substreams.Remove(substreamId);
             SendAsync(async linked =>
             {
                 await Task.Run(() => Serializer.SerializeWithLengthPrefix(Inner, new MultiplexPacket()
                 {
-                    BrookId = brookId == OutboundBrook ? 0 : OutboundBrook = brookId,
+                    SubstreamId = substreamId == OutboundSubstream ? 0 : OutboundSubstream = substreamId,
                     EndOfStream = true
                 }, PrefixStyle.Base128), linked);
                 await Inner.FlushAsync(linked);

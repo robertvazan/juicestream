@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
-    class MultiplexBrook : Stream
+    class MultiplexSubstream : Stream
     {
-        readonly MultiplexStream Stream;
+        readonly MultiplexStream ParentStream;
         readonly long BrookId;
         byte[] ReadBuffer;
         int ReadOffset;
@@ -26,21 +26,21 @@ namespace JuiceStream
         public override long Length { get { throw new NotSupportedException(); } }
         public override long Position { get { throw new NotSupportedException(); } set { throw new NotSupportedException(); } }
 
-        public MultiplexBrook(MultiplexStream stream, long id)
+        public MultiplexSubstream(MultiplexStream stream, long id)
         {
-            Stream = stream;
+            ParentStream = stream;
             BrookId = id;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                Stream.QueueClose(BrookId);
+                ParentStream.QueueClose(BrookId);
             base.Dispose(disposing);
         }
 
         public override void Flush() { FlushAsync().Wait(); }
-        public override Task FlushAsync(CancellationToken token) { return Stream.FlushAsync(token); }
+        public override Task FlushAsync(CancellationToken token) { return ParentStream.FlushAsync(token); }
         public override int Read(byte[] buffer, int offset, int count) { return ReadAsync(buffer, offset, count).Result; }
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken token)
         {
@@ -75,7 +75,7 @@ namespace JuiceStream
             {
                 var slice = new byte[Math.Min(count, MaxPacketSize)];
                 Array.Copy(buffer, offset, slice, 0, slice.Length);
-                await Stream.SendAsync(BrookId, slice, token);
+                await ParentStream.SendAsync(BrookId, slice, token);
                 count -= slice.Length;
                 offset += slice.Length;
             }

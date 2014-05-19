@@ -11,7 +11,7 @@ namespace JuiceStream
     class MultiplexPacket
     {
         [ProtoMember(1, DataFormat = DataFormat.ZigZag)]
-        public long BrookId { get; set; }
+        public long SubstreamId { get; set; }
         [ProtoMember(2)]
         public byte[] Data { get; set; }
         [ProtoMember(3)]

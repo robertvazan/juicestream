@@ -62,7 +62,7 @@
     <Compile Include="PingStream.cs" />
     <Compile Include="PrefixStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MultiplexBrook.cs" />
+    <Compile Include="MultiplexSubstream.cs" />
     <Compile Include="QueueStream.cs" />
     <Compile Include="StreamEx.cs" />
   </ItemGroup>
