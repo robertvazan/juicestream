@@ -46,13 +46,10 @@ namespace JuiceStream
                 Substreams[NextId] = substream;
                 ++NextId;
             }
-            await SendAsync(linked =>
+            await SendAsync(linked => ProtobufEx.SerializeWithLengthPrefixAsync(Inner, new MultiplexPacket()
             {
-                return Task.Run(() => Serializer.SerializeWithLengthPrefix(Inner, new MultiplexPacket()
-                {
-                    SubstreamId = OutboundSubstream = substream.Id
-                }, PrefixStyle.Base128), linked);
-            }, cancellation);
+                SubstreamId = OutboundSubstream = substream.Id
+            }, PrefixStyle.Base128, linked), cancellation);
             return substream;
         }
 
@@ -66,7 +63,7 @@ namespace JuiceStream
             {
                 while (true)
                 {
-                    var packet = await Task.Run(() => Serializer.DeserializeWithLengthPrefix<MultiplexPacket>(Inner, PrefixStyle.Base128), CancelAll.Token);
+                    var packet = await ProtobufEx.DeserializeWithLengthPrefixAsync<MultiplexPacket>(Inner, PrefixStyle.Base128, CancelAll.Token);
                     if (packet.SubstreamId != 0)
                         InboundSubstream = -packet.SubstreamId;
                     else if (InboundSubstream == 0)
@@ -104,14 +101,11 @@ namespace JuiceStream
 
         internal Task SendAsync(long substreamId, byte[] data, CancellationToken cancellation)
         {
-            return SendAsync(linked =>
+            return SendAsync(linked => ProtobufEx.SerializeWithLengthPrefixAsync(Inner, new MultiplexPacket()
             {
-                return Task.Run(() => Serializer.SerializeWithLengthPrefix(Inner, new MultiplexPacket()
-                {
-                    SubstreamId = substreamId == OutboundSubstream ? 0 : OutboundSubstream = substreamId,
-                    Data = data
-                }, PrefixStyle.Base128), linked);
-            }, cancellation);
+                SubstreamId = substreamId == OutboundSubstream ? 0 : OutboundSubstream = substreamId,
+                Data = data
+            }, PrefixStyle.Base128, linked), cancellation);
         }
 
         internal Task FlushAsync(CancellationToken cancellation) { return SendAsync(linked => Inner.FlushAsync(linked), cancellation); }
@@ -122,11 +116,11 @@ namespace JuiceStream
                 Substreams.Remove(substreamId);
             SendAsync(async linked =>
             {
-                await Task.Run(() => Serializer.SerializeWithLengthPrefix(Inner, new MultiplexPacket()
+                await ProtobufEx.SerializeWithLengthPrefixAsync(Inner, new MultiplexPacket()
                 {
                     SubstreamId = substreamId == OutboundSubstream ? 0 : OutboundSubstream = substreamId,
                     EndOfStream = true
-                }, PrefixStyle.Base128), linked);
+                }, PrefixStyle.Base128, linked);
                 await Inner.FlushAsync(linked);
             }, CancellationToken.None).ContinueWith(t => Logger.Error(t.Exception), TaskContinuationOptions.OnlyOnFaulted);
         }
