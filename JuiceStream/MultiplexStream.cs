@@ -89,6 +89,15 @@ namespace JuiceStream
                     }
                 }
             }
+            catch (EndOfStreamException)
+            {
+                Dispose();
+                List<MultiplexSubstream> substreams;
+                lock (Substreams)
+                    substreams = Substreams.Values.ToList();
+                foreach (var substream in substreams)
+                    substream.Dispose();
+            }
             catch (Exception e)
             {
                 if (!CancelAll.Token.IsCancellationRequested)
