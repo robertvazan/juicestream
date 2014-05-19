@@ -35,15 +35,25 @@ namespace JuiceStream
             Inner.Dispose();
         }
 
-        public Stream Connect()
+        public Stream Connect() { return ConnectAsync().Result; }
+        public Task<Stream> ConnectAsync() { return ConnectAsync(CancellationToken.None); }
+        public async Task<Stream> ConnectAsync(CancellationToken cancellation)
         {
+            MultiplexSubstream substream;
             lock (Substreams)
             {
-                var substream = new MultiplexSubstream(this, NextId);
+                substream = new MultiplexSubstream(this, NextId);
                 Substreams[NextId] = substream;
                 ++NextId;
-                return substream;
             }
+            await SendAsync(linked =>
+            {
+                return Task.Run(() => Serializer.SerializeWithLengthPrefix(Inner, new MultiplexPacket()
+                {
+                    SubstreamId = OutboundSubstream = substream.Id
+                }, PrefixStyle.Base128), linked);
+            }, cancellation);
+            return substream;
         }
 
         public Stream Accept() { return AcceptAsync().Result; }

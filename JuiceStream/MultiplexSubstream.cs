@@ -12,7 +12,7 @@ namespace JuiceStream
     class MultiplexSubstream : Stream
     {
         readonly MultiplexStream ParentStream;
-        readonly long BrookId;
+        public readonly long Id;
         byte[] ReadBuffer;
         int ReadOffset;
         bool EndOfStream;
@@ -29,13 +29,13 @@ namespace JuiceStream
         public MultiplexSubstream(MultiplexStream stream, long id)
         {
             ParentStream = stream;
-            BrookId = id;
+            Id = id;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                ParentStream.QueueClose(BrookId);
+                ParentStream.QueueClose(Id);
             base.Dispose(disposing);
         }
 
@@ -75,7 +75,7 @@ namespace JuiceStream
             {
                 var slice = new byte[Math.Min(count, MaxPacketSize)];
                 Array.Copy(buffer, offset, slice, 0, slice.Length);
-                await ParentStream.SendAsync(BrookId, slice, token);
+                await ParentStream.SendAsync(Id, slice, token);
                 count -= slice.Length;
                 offset += slice.Length;
             }
