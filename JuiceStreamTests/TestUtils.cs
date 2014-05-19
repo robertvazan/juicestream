@@ -1,4 +1,8 @@
-﻿using NUnit.Framework;
+﻿using NLog;
+using NLog.Config;
+using NLog.Layouts;
+using NLog.Targets;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +15,17 @@ namespace JuiceStreamTests
 {
     static class TestUtils
     {
+        static TestUtils()
+        {
+            var configuration = new LoggingConfiguration();
+            var consoleTarget = new ConsoleTarget() { Layout = new SimpleLayout("${date:format=yyyy-MM-dd HH\\:mm\\:ss.fff} : ${message}") };
+            configuration.AddTarget("Console", consoleTarget);
+            configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
+            LogManager.Configuration = configuration;
+        }
+
+        public static void SetupLogging() { }
+
         public static void TestCommonOperations(Func<Stream, Stream> factory, Func<byte[], IEnumerable<byte>> decorate)
         {
             var inner = new MemoryStream();
@@ -35,27 +50,27 @@ namespace JuiceStreamTests
             Assert.AreEqual(0, stream.ReadAsync(buffer, 1, 3).Result);
         }
 
-        public static void RunTwister(Stream endpoint1, Stream endpoint2)
+        public static void RunTwister(Stream endpoint1, Stream endpoint2, TimeSpan? timeout = null)
         {
             Parallel.Invoke(
-                () => RunOneWayTwister(endpoint1, endpoint2),
-                () => RunOneWayTwister(endpoint2, endpoint1));
+                () => RunOneWayTwister(endpoint1, endpoint2, timeout),
+                () => RunOneWayTwister(endpoint2, endpoint1, timeout));
         }
 
-        public static void RunOneWayTwister(Stream sink, Stream source)
+        public static void RunOneWayTwister(Stream sink, Stream source, TimeSpan? timeout = null)
         {
             var end = DateTime.UtcNow.AddSeconds(3);
             while (DateTime.UtcNow < end)
-                RunOneTimeTwister(sink, source);
+                RunOneTimeTwister(sink, source, timeout);
         }
 
-        public static void RunOneTimeTwister(Stream sink, Stream source)
+        public static void RunOneTimeTwister(Stream sink, Stream source, TimeSpan? timeout = null)
         {
             var random = new Random(sink.GetHashCode() * 31 * 31 + source.GetHashCode() * 31 + (int)DateTime.UtcNow.Ticks + 3);
             var rubbish = new byte[random.Next(10, 100000)];
             random.NextBytes(rubbish);
             var crunching = Task.WhenAll(Task.Run(() => WriteRubbish(sink, rubbish)), Task.Run(() => ReadRubbish(source, rubbish)));
-            if (Task.WhenAny(crunching, Task.Delay(TimeSpan.FromSeconds(3))).Result != crunching)
+            if (Task.WhenAny(crunching, Task.Delay(timeout ?? TimeSpan.FromSeconds(3))).Result != crunching)
                 throw new TimeoutException();
         }
 
