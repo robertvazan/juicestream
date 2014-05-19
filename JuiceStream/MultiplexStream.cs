@@ -67,7 +67,7 @@ namespace JuiceStream
                     {
                         if (!Brooks.TryGetValue(InboundBrook, out brook) && InboundBrook < 0)
                         {
-                            Brooks[InboundBrook] = new MultiplexBrook(this, InboundBrook);
+                            Brooks[InboundBrook] = brook = new MultiplexBrook(this, InboundBrook);
                             created = true;
                         }
                     }
