@@ -77,6 +77,7 @@ namespace JuiceStream
                 Array.Copy(buffer, offset, slice, 0, slice.Length);
                 await Stream.SendAsync(BrookId, slice, token);
                 count -= slice.Length;
+                offset += slice.Length;
             }
         }
 
