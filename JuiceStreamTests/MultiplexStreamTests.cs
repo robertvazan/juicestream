@@ -15,9 +15,13 @@ namespace JuiceStreamTests
         public void SingleTwister()
         {
             var queue = new DuplexQueueStream();
-            var client = new MultiplexStream(queue);
-            var server = new MultiplexStream(queue.Peer);
-            TestUtils.RunTwister(client.Connect(), server.Accept());
+            var clientPX = new MultiplexStream(queue);
+            var serverPX = new MultiplexStream(queue.Peer);
+            var client = clientPX.Connect();
+            client.WriteByte(123);
+            var server = serverPX.Accept();
+            Assert.AreEqual(123, server.ReadByte());
+            TestUtils.RunTwister(client, server);
         }
     }
 }
