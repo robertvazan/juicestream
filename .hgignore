@@ -4,3 +4,4 @@ obj
 *.suo
 *.user
 packages
+*.nupkg
