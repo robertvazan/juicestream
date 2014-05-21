@@ -35,7 +35,7 @@ namespace JuiceStream
                 shift += 7;
             } while ((lengthBuf[0] & 0x80) != 0);
             var buffer = new byte[length];
-            await stream.ReadFixedAsync(buffer);
+            await stream.ReadFixedAsync(buffer, cancellation);
             return Serializer.Deserialize<T>(new MemoryStream(buffer));
         }
     }
