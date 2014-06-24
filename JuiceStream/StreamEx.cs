@@ -23,6 +23,12 @@ public static class StreamEx
             count -= read;
         }
     }
+    public static byte[] ReadFixed(this Stream stream, int count)
+    {
+        var buffer = new byte[count];
+        stream.ReadFixed(buffer);
+        return buffer;
+    }
     public static Task ReadFixedAsync(this Stream stream, byte[] buffer) { return ReadFixedAsync(stream, buffer, 0, buffer.Length, CancellationToken.None); }
     public static Task ReadFixedAsync(this Stream stream, byte[] buffer, CancellationToken cancellation) { return ReadFixedAsync(stream, buffer, 0, buffer.Length, cancellation); }
     public static Task ReadFixedAsync(this Stream stream, byte[] buffer, int offset, int count) { return ReadFixedAsync(stream, buffer, offset, count, CancellationToken.None); }
@@ -36,6 +42,12 @@ public static class StreamEx
             offset += read;
             count -= read;
         }
+    }
+    public static async Task<byte[]> ReadFixedAsync(this Stream stream, int count)
+    {
+        var buffer = new byte[count];
+        await stream.ReadFixedAsync(buffer);
+        return buffer;
     }
     public static void Write(this Stream stream, byte[] buffer) { stream.Write(buffer, 0, buffer.Length); }
     public static Task WriteAsync(this Stream stream, byte[] buffer) { return stream.WriteAsync(buffer, 0, buffer.Length); }
