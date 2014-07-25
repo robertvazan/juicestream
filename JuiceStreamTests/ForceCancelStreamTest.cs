@@ -69,5 +69,12 @@ namespace JuiceStreamTests
                 listener.Stop();
             }
         }
+
+        [Test]
+        public void Twister()
+        {
+            var queue = new DuplexQueueStream();
+            TestUtils.RunTwister(new ForceCancelStream(queue), new ForceCancelStream(queue.Peer));
+        }
     }
 }
