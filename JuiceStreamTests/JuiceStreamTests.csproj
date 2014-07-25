@@ -49,6 +49,7 @@
     <Compile Include="CancellableStreamTest.cs" />
     <Compile Include="DuplexBufferedStreamTest.cs" />
     <Compile Include="DuplexQueueStreamTest.cs" />
+    <Compile Include="ForceCancelStreamTest.cs" />
     <Compile Include="MultiplexStreamTests.cs" />
     <Compile Include="PrefixStreamTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

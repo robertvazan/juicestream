@@ -57,6 +57,8 @@
     <Compile Include="CancellableStream.cs" />
     <Compile Include="DuplexBufferedStream.cs" />
     <Compile Include="DuplexQueueStream.cs" />
+    <Compile Include="ForceCancelStream.cs" />
+    <Compile Include="ForcedCancellable.cs" />
     <Compile Include="MultiplexPacket.cs" />
     <Compile Include="MultiplexStream.cs" />
     <Compile Include="PingStream.cs" />
