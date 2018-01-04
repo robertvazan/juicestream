@@ -1,11 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JuiceStream", "JuiceStream\JuiceStream.csproj", "{A1CFB53A-C1D5-4734-AF77-DA21962E43C3}"
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JuiceStream", "JuiceStream\JuiceStream.csproj", "{F948F50D-3209-4E6B-8023-74AD517C148C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JuiceStreamTests", "JuiceStreamTests\JuiceStreamTests.csproj", "{BF9C818D-8C2C-4CBF-9A34-F4BE2FE427B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JuiceStreamTests", "JuiceStreamTests\JuiceStreamTests.csproj", "{029CF0DF-0328-4400-BF71-9C2807960C50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +11,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A1CFB53A-C1D5-4734-AF77-DA21962E43C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1CFB53A-C1D5-4734-AF77-DA21962E43C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1CFB53A-C1D5-4734-AF77-DA21962E43C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1CFB53A-C1D5-4734-AF77-DA21962E43C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF9C818D-8C2C-4CBF-9A34-F4BE2FE427B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF9C818D-8C2C-4CBF-9A34-F4BE2FE427B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF9C818D-8C2C-4CBF-9A34-F4BE2FE427B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF9C818D-8C2C-4CBF-9A34-F4BE2FE427B1}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+		{F948F50D-3209-4E6B-8023-74AD517C148C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F948F50D-3209-4E6B-8023-74AD517C148C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F948F50D-3209-4E6B-8023-74AD517C148C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F948F50D-3209-4E6B-8023-74AD517C148C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{029CF0DF-0328-4400-BF71-9C2807960C50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{029CF0DF-0328-4400-BF71-9C2807960C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{029CF0DF-0328-4400-BF71-9C2807960C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{029CF0DF-0328-4400-BF71-9C2807960C50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
