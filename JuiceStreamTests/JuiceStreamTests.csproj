@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>JuiceStreamTests</RootNamespace>
     <AssemblyName>JuiceStreamTests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,9 +34,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\JuiceStream\JuiceStream.csproj">
       <Project>{F948F50D-3209-4E6B-8023-74AD517C148C}</Project>
       <Name>JuiceStream</Name>
@@ -51,6 +48,9 @@
     <Compile Include="PrefixStreamTests.cs" />
     <Compile Include="QueueStreamTest.cs" />
     <Compile Include="TestUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
