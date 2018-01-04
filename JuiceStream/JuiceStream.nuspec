@@ -8,7 +8,7 @@
 		<tags>stream io protocol multiplex duplex ping serialization</tags>
 		<licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<projectUrl>https://blog.machinezoo.com/introducing-juicestream-library</projectUrl>
+		<projectUrl>https://juicestream.machinezoo.com/</projectUrl>
 		<iconUrl>https://cdn.machinezoo.com/h/m_GdM6wcXVddqS7caOk-hHaqVNGFN-hdYPdFFTZOntw/juicestream-favicon/android-chrome-192x192.png</iconUrl>
 		<dependencies>
 			<dependency id="Nito.AsyncEx" version="3.0.1" />
