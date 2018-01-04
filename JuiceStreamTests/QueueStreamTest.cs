@@ -1,4 +1,5 @@
-﻿using JuiceStream;
+﻿// Part of JuiceStream: https://juicestream.machinezoo.com
+using JuiceStream;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

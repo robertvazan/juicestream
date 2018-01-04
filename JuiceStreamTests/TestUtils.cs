@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿// Part of JuiceStream: https://juicestream.machinezoo.com
+using NLog;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;

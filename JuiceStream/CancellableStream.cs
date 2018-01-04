@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Part of JuiceStream: https://juicestream.machinezoo.com
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

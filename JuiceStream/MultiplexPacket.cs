@@ -1,4 +1,5 @@
-﻿using ProtoBuf;
+﻿// Part of JuiceStream: https://juicestream.machinezoo.com
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;

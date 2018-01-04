@@ -1,4 +1,5 @@
-﻿using Nito.AsyncEx;
+﻿// Part of JuiceStream: https://juicestream.machinezoo.com
+using Nito.AsyncEx;
 using NLog;
 using ProtoBuf;
 using System;
