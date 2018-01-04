@@ -10,6 +10,11 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<projectUrl>https://blog.machinezoo.com/introducing-juicestream-library</projectUrl>
 		<iconUrl>https://cdn.machinezoo.com/h/m_GdM6wcXVddqS7caOk-hHaqVNGFN-hdYPdFFTZOntw/juicestream-favicon/android-chrome-192x192.png</iconUrl>
+		<dependencies>
+			<dependency id="Nito.AsyncEx" version="3.0.1" />
+			<dependency id="NLog" version="4.4.12" />
+			<dependency id="protobuf-net" version="2.3.3" />
+		</dependencies>
 	</metadata>
 </package>
 
