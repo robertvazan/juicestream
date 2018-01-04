@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("JuiceStream")]
-[assembly: AssemblyDescription("Generic Stream implementations: MultiplexStream, DuplexBufferedStream, PingStream, QueueStream, PrefixStream, CancellableStream. Particularly handy in binary protocols.")]
+[assembly: AssemblyDescription("General-purpose Stream implementations: MultiplexStream, DuplexBufferedStream, PingStream, QueueStream, PrefixStream, CancellableStream. Particularly handy in binary protocols.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Robert Važan")]
 [assembly: AssemblyProduct("JuiceStream")]
-[assembly: AssemblyCopyright("Copyright ©  2014 Robert Važan")]
+[assembly: AssemblyCopyright("Copyright © 2014-2018 Robert Važan")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
