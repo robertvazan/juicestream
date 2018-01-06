@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
-    public static class ForcedCancellable
+    static class ForcedCancellable
     {
-        public static Task FromTask(Task inner, CancellationToken cancellation)
+        internal static Task FromTask(Task inner, CancellationToken cancellation)
         {
             var source = new TaskCompletionSource();
             var registration = cancellation.Register(() => source.TrySetCanceled());
@@ -28,7 +28,7 @@ namespace JuiceStream
             return source.Task;
         }
 
-        public static Task<T> FromTask<T>(Task<T> inner, CancellationToken cancellation)
+        internal static Task<T> FromTask<T>(Task<T> inner, CancellationToken cancellation)
         {
             var source = new TaskCompletionSource<T>();
             var registration = cancellation.Register(() => source.TrySetCanceled());

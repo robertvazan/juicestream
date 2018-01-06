@@ -44,7 +44,7 @@ namespace JuiceStreamTests
                     using (var stream = wrapper(client.GetStream()))
                     using (var cancellation = new CancellationTokenSource())
                     {
-                        var read = stream.ReadAsync(new byte[1], cancellation.Token);
+                        var read = stream.ReadAsync(new byte[1], 0, 1, cancellation.Token);
                         cancellation.Cancel();
                         bool result = false;
                         try
