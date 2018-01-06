@@ -3,7 +3,7 @@
 	<metadata>
 		<id>JuiceStream</id>
 		<version>1.1.7.0</version>
-		<authors>robertvazan</authors>
+		<authors>Robert Važan</authors>
 		<description>General-purpose Stream implementations: MultiplexStream, DuplexBufferedStream, PingStream, QueueStream, PrefixStream, CancellableStream. Particularly handy in binary protocols.</description>
 		<tags>stream io protocol multiplex duplex ping serialization</tags>
 		<licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
