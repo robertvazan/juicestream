@@ -6,7 +6,7 @@
 		<authors>Robert Važan</authors>
 		<description>General-purpose Stream implementations: MultiplexStream, DuplexBufferedStream, PingStream, QueueStream, PrefixStream, CancellableStream. Particularly handy in binary protocols.</description>
 		<tags>stream io protocol multiplex duplex ping serialization</tags>
-		<licenseUrl>https://opensource.org/licenses/Apache-2.0</licenseUrl>
+		<licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<projectUrl>https://juicestream.machinezoo.com/</projectUrl>
 		<iconUrl>https://cdn.machinezoo.com/h/m_GdM6wcXVddqS7caOk-hHaqVNGFN-hdYPdFFTZOntw/juicestream-favicon/android-chrome-192x192.png</iconUrl>
