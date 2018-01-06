@@ -12,6 +12,12 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
+    /// <summary>
+    /// As we have seen with HTTP, creating lots of parallel connections isn't healthy for performance of your application.
+    /// Just like HTTP 2.0, JuiceStream's <c>MultiplexStream</c> allows you to tunnel multiple substreams through single outer stream.
+    /// Either peer can issue <c>Connect</c> calls that create substreams
+    /// while the other peer issues <c>Accept</c> calls to get the opposite end of the substream.
+    /// </summary>
     public class MultiplexStream : IDisposable
     {
         readonly Stream Inner;

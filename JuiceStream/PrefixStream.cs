@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
+    /// <summary>
+    /// Many protocols need to include short "magic" headers that identify the protocol and its version.
+    /// <c>PrefixStream</c> encapsulates this behavior.
+    /// It writes out specified binary prefix before first write and checks presence and correctness of the prefix before first read.
+    /// </summary>
     public class PrefixStream : Stream
     {
         readonly byte[] Prefix;

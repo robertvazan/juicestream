@@ -10,6 +10,13 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
+    /// <summary>
+    /// Half-open TCP connections can cause serious sync issues in applications.
+    /// Default 2-hour TCP keepalive cannot be configured on a per-connection basis on Windows.
+    /// Common wisdom is to implement application-layer ping. <c>PingStream</c> will spare you of this duty.
+    /// Designed to work over single substream of <c>MultiplexStream</c>,
+    /// both endpoints of the <c>PingStream</c> will perform regular pings in order to kill broken connections as early as possible.
+    /// </summary>
     public class PingStream : IDisposable
     {
         readonly Stream Stream;

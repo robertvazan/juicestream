@@ -10,6 +10,14 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
+    /// <summary>
+    /// Even though <c>NetworkStream</c> implements <c>Stream</c> methods that take <c>CancellationToken</c>,
+    /// the supplied token is in fact ignored and <c>NetworkStream</c> keeps hanging on reads even after cancellation has been signaled.
+    /// <c>ForceCancelStream</c> is a wrapper around <c>NetworkStream</c> (or any other <c>Stream</c>) that enforces the use of <c>CancellationToken</c>.
+    /// It will return immediately after cancellation is signaled.
+    /// The underlying <c>Stream</c> will be left hanging in separate thread that will be cleaned up after you close the <c>Stream</c>,
+    /// which is the most likely scenario after you cancel an operation.
+    /// </summary>
     public class ForceCancelStream : Stream
     {
         readonly Stream Inner;

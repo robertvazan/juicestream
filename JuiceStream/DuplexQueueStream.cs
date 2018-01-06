@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
+    /// <summary>
+    /// <c>DuplexQueueStream</c> embeds two <c>QueueStream</c> instances to provide full-duplex in-memory communication
+    /// between two linked <c>DuplexQueueStream</c> peers.
+    /// </summary>
     public class DuplexQueueStream : Stream
     {
         public readonly DuplexQueueStream Peer;

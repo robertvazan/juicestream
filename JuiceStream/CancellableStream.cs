@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
+    /// <summary>
+    /// When writing a lot of async code, one often discovers that all those <c>CancellationToken</c> instances
+    /// passed around are only used as parameters to <c>Stream</c> methods.
+    /// <c>CancellableStream</c> spares you of the possibility of forgetting to use the <c>CancellationToken</c>
+    /// somewhere by enforcing use of specified <c>CancellationToken</c> in all calls to the controlled <c>Stream</c>.
+    /// </summary>
     public class CancellableStream : Stream
     {
         readonly Stream Inner;

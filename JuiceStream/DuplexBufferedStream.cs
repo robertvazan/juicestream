@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
+    /// <summary>
+    /// .NET already has its <c>BufferedStream</c>, but that one will throw unexpected exceptions, especially on <c>NetworkStreams</c>.
+    /// JuiceStream's <c>DuplexBufferedStream</c> embeds two <c>BufferedStream</c> instances,
+    /// one for each direction, to provide full duplex buffering over non-seekable streams.
+    /// </summary>
     public class DuplexBufferedStream : Stream
     {
         readonly Stream Inner;

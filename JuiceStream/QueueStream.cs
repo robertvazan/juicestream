@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 
 namespace JuiceStream
 {
+    /// <summary>
+    /// Mostly intended for testing, <c>QueueStream</c> is like <c>PipeStream</c>,
+    /// but it drops the inter-process functionality in favor of easy setup and higher performance.
+    /// Writes to <c>QueueStream</c> come out as reads from the same <c>QueueStream</c>.
+    /// </summary>
     public class QueueStream : Stream
     {
         AsyncCollection<byte[]> Queue = new AsyncCollection<byte[]>(1);
