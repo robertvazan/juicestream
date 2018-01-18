@@ -1,28 +1,70 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PackageVersion>1.1.12.0</PackageVersion>
-    <Authors>Robert Važan</Authors>
-    <PackageIconUrl>https://cdn.machinezoo.com/h/m_GdM6wcXVddqS7caOk-hHaqVNGFN-hdYPdFFTZOntw/juicestream-favicon/android-chrome-192x192.png</PackageIconUrl>
-    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <PackageProjectUrl>https://juicestream.machinezoo.com/</PackageProjectUrl>
-    <PackageTags>stream io protocol multiplex duplex ping serialization</PackageTags>
-    <Description>General-purpose Stream implementations: MultiplexStream, DuplexBufferedStream, PingStream, QueueStream, PrefixStream, CancellableStream. Particularly handy in binary protocols.</Description>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F948F50D-3209-4E6B-8023-74AD517C148C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>JuiceStream</RootNamespace>
+    <AssemblyName>JuiceStream</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>bin\Debug\net45\JuiceStream.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\JuiceStream.xml</DocumentationFile>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType></DebugType>
-    <DocumentationFile>bin\Release\net45\JuiceStream.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\JuiceStream.xml</DocumentationFile>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="protobuf-net" Version="2.3.3" />
-    <PackageReference Include="NLog" Version="4.4.12" />
-    <PackageReference Include="Nito.AsyncEx" Version="3.0.1" />
+    <Reference Include="System" />
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.3.3\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent">
+      <HintPath>..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx">
+      <HintPath>..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Enlightenment">
+      <HintPath>..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+    </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CancellableStream.cs" />
+    <Compile Include="DuplexBufferedStream.cs" />
+    <Compile Include="DuplexQueueStream.cs" />
+    <Compile Include="ForceCancelStream.cs" />
+    <Compile Include="ForcedCancellable.cs" />
+    <Compile Include="MultiplexPacket.cs" />
+    <Compile Include="MultiplexStream.cs" />
+    <Compile Include="MultiplexSubstream.cs" />
+    <Compile Include="PingStream.cs" />
+    <Compile Include="PrefixStream.cs" />
+    <Compile Include="ProtobufEx.cs" />
+    <Compile Include="QueueStream.cs" />
+    <Compile Include="StreamEx.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
-
