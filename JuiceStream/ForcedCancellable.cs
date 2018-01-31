@@ -1,5 +1,4 @@
 ﻿// Part of JuiceStream: https://juicestream.machinezoo.com
-using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace JuiceStream
     {
         internal static Task FromTask(Task inner, CancellationToken cancellation)
         {
-            var source = new TaskCompletionSource();
+            var source = new TaskCompletionSource<object>();
             var registration = cancellation.Register(() => source.TrySetCanceled());
             inner.ContinueWith(t =>
             {
@@ -23,7 +22,7 @@ namespace JuiceStream
                 else if (t.IsFaulted)
                     source.TrySetException(t.Exception);
                 else
-                    source.TrySetResult();
+                    source.TrySetResult(null);
             });
             return source.Task;
         }

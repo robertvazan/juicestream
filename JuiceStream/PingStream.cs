@@ -1,5 +1,4 @@
 ﻿// Part of JuiceStream: https://juicestream.machinezoo.com
-using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +19,7 @@ namespace JuiceStream
     public class PingStream : IDisposable
     {
         readonly Stream Stream;
-        readonly TaskCompletionSource CompletionSource = new TaskCompletionSource();
+        readonly TaskCompletionSource<object> CompletionSource = new TaskCompletionSource<object>();
         readonly CancellationTokenSource Cancel = new CancellationTokenSource();
         readonly SemaphoreSlim AckQueue = new SemaphoreSlim(0);
 
@@ -39,7 +38,7 @@ namespace JuiceStream
         {
             Cancel.Cancel();
             Stream.Dispose();
-            CompletionSource.TrySetResult();
+            CompletionSource.TrySetResult(null);
         }
 
         async void Run()
