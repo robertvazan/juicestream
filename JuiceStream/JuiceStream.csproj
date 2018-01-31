@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PackageVersion>1.1.14.0</PackageVersion>
+    <PackageVersion>1.2.0.0</PackageVersion>
     <Authors>Robert Važan</Authors>
     <PackageIconUrl>https://cdn.machinezoo.com/h/m_GdM6wcXVddqS7caOk-hHaqVNGFN-hdYPdFFTZOntw/juicestream-favicon/android-chrome-192x192.png</PackageIconUrl>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
