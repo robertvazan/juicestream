@@ -60,7 +60,7 @@ namespace JuiceStreamTests
 
         public static void RunOneWayTwister(Stream sink, Stream source, TimeSpan? timeout = null)
         {
-            var end = DateTime.UtcNow.AddSeconds(3);
+            var end = DateTime.UtcNow.AddSeconds(10);
             while (DateTime.UtcNow < end)
                 RunOneTimeTwister(sink, source, timeout);
         }
@@ -71,7 +71,7 @@ namespace JuiceStreamTests
             var rubbish = new byte[random.Next(10, 100000)];
             random.NextBytes(rubbish);
             var crunching = Task.WhenAll(Task.Run(() => WriteRubbish(sink, rubbish)), Task.Run(() => ReadRubbish(source, rubbish)));
-            if (Task.WhenAny(crunching, Task.Delay(timeout ?? TimeSpan.FromSeconds(3))).Result != crunching)
+            if (Task.WhenAny(crunching, Task.Delay(timeout ?? TimeSpan.FromSeconds(10))).Result != crunching)
                 throw new TimeoutException();
         }
 
